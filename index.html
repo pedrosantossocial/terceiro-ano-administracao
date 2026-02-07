@@ -169,6 +169,11 @@
     <h2>Painel do Aluno</h2>
     <p><strong>Aluno:</strong> <span id="nomeAluno"></span></p>
     <form id="formAluno">
+      <select id="prioridade">
+        <option value="baixa">Prioridade baixa</option>
+        <option value="media">Prioridade média</option>
+        <option value="alta">Prioridade alta</option>
+      </select>
       <input id="titulo" placeholder="Atividade" required />
       <input id="data" type="date" required />
       <select id="materia">
@@ -181,6 +186,12 @@
       </select>
       <button>Adicionar</button>
     </form>
+    <div id="progresso"></div>
+    <div id="grafico"></div>
+    <div id="semana"></div>
+    <div id="calendario"></div>
+    <button onclick="exportarCSV()" style="background:#2980b9">📥 Exportar atividades</button>
+    <button onclick="toggleDark()" style="background:#111">🌙 Modo escuro</button>
     <div id="lista"></div>
   </div>
 
@@ -249,12 +260,61 @@ function logout(){localStorage.clear();location.reload()}
 
 // ===== ALUNO =====
 function iniciarAluno(){
-  $('nomeAluno').textContent = usuario;
   $('alunoApp').style.display='block';
+  $('nomeAluno').textContent = usuario;
   const key='ativ_'+usuario;
   let atvs=JSON.parse(localStorage.getItem(key))||[];
-  $('formAluno').onsubmit=e=>{e.preventDefault();atvs.push({t:titulo.value,m:materia.value,d:data.value,c:false});localStorage.setItem(key,JSON.stringify(atvs));renderAluno()}
-  function renderAluno(){lista.innerHTML='';atvs.forEach((a,i)=>{const d=document.createElement('div');d.className='atividade'+(a.c?' concluida':'');d.innerHTML=`<span>${a.t} - ${a.m} | ${a.d}</span>`;const b=document.createElement('button');b.textContent='✔';b.onclick=()=>{a.c=!a.c;localStorage.setItem(key,JSON.stringify(atvs));renderAluno()};d.appendChild(b);lista.appendChild(d)})}
+
+  $('formAluno').onsubmit=e=>{
+    e.preventDefault();
+    atvs.push({
+      t:titulo.value,
+      m:materia.value,
+      d:data.value,
+      p:prioridade.value,
+      b:new Date(data.value).getMonth()+1,
+      c:false
+    });
+    localStorage.setItem(key,JSON.stringify(atvs));
+    renderAluno();
+  };
+
+  function renderAluno(){
+    const hoje=new Date().toISOString().split('T')[0];
+    const concluidas=atvs.filter(a=>a.c).length;
+
+    progresso.innerHTML=`<strong>Progresso:</strong> ${concluidas}/${atvs.length} concluídas`;
+
+    grafico.innerHTML=`<div style="background:#eee;height:12px;border-radius:6px;overflow:hidden">
+      <div style="width:${atvs.length?concluidas/atvs.length*100:0}%;background:#27ae60;height:100%"></div>
+    </div>`;
+
+    const hojeData=new Date();
+    const semanaFim=new Date();
+    semanaFim.setDate(hojeData.getDate()+7);
+
+    semana.innerHTML='<h4>📅 Minha semana</h4>';
+    atvs.filter(a=>!a.c && new Date(a.d)>=hojeData && new Date(a.d)<=semanaFim)
+      .forEach(a=>semana.innerHTML+=`<div>• ${a.t} (${a.d})</div>`);
+
+    calendario.innerHTML='<h4>🗓 Calendário mensal</h4>';
+    atvs.forEach(a=>calendario.innerHTML+=`<div>${a.d} — ${a.t}</div>`);
+
+    lista.innerHTML='';
+    atvs.forEach((a,i)=>{
+      const d=document.createElement('div');
+      const atrasada=!a.c && a.d<hoje;
+      d.className='atividade'+(a.c?' concluida':'');
+      d.style.borderLeft='6px solid '+(a.p==='alta'?'#e74c3c':a.p==='media'?'#f1c40f':'#2ecc71');
+      d.innerHTML=`<span>${a.t} - ${a.m} | ${a.d}${atrasada?' ⚠️ Atrasada':''}<br><small>Bimestre ${Math.ceil(a.b/2)}</small></span>`;
+      const b=document.createElement('button');
+      b.textContent='✔';
+      b.onclick=()=>{a.c=!a.c;localStorage.setItem(key,JSON.stringify(atvs));renderAluno()};
+      d.appendChild(b);
+      lista.appendChild(d);
+    });
+  }
+
   renderAluno();
 }
 
