@@ -4,336 +4,130 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>3º Ano A de Administração</title>
+
   <style>
-    * { box-sizing: border-box; font-family: 'Segoe UI', Arial, sans-serif; }
-    body {
-      background: linear-gradient(135deg, #8e0e00, #c0392b);
-      margin: 0;
-      padding: 20px;
-      min-height: 100vh;
+    :root{
+      --vermelho:#c0392b;
+      --vermelho-escuro:#8e0e00;
+      --bg:#f5f5f5;
+      --card:#ffffff;
+      --texto:#222;
     }
-    h1 {
-      text-align: center;
-      color: #fff;
-      margin-bottom: 10px;
-      font-size: 2.2em;
+    body.dark{
+      --bg:#121212;
+      --card:#1e1e1e;
+      --texto:#f1f1f1;
     }
-    h2, h3, h4 { color:#8e0e00 }
-
-    .container {
-      max-width: 950px;
-      margin: auto;
-      background: #ffffffee;
-      padding: 25px;
-      border-radius: 12px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.25);
-    }
-
-    .banner {
-      background: linear-gradient(90deg, #c0392b, #8e0e00);
-      color: white;
-      padding: 15px;
-      border-radius: 10px;
-      text-align: center;
-      margin-bottom: 20px;
-    }
-
-    form { display: grid; gap: 10px; margin-bottom: 20px; }
-
-    input, select, textarea, button {
-      padding: 12px;
-      border-radius: 6px;
-      border: 1px solid #ccc;
-      font-size: 14px;
-    }
-
-    textarea { resize: vertical; min-height: 90px; }
-
-    button {
-      background: #c0392b;
-      color: #fff;
-      font-weight: bold;
-      cursor: pointer;
-      border: none;
-      transition: transform .1s, box-shadow .1s;
-    }
-
-    button:hover {
-      background: #a93226;
-      transform: translateY(-1px);
-      box-shadow: 0 4px 8px rgba(0,0,0,.2);
-    }
-
-    .atividade, .aula {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 12px;
-      border-bottom: 1px solid #eee;
-    }
-
-    .atividade.concluida span {
-      text-decoration: line-through;
-      color: #999;
-    }
-
-    .acoes button {
-      margin-left: 5px;
-      background: #27ae60;
-    }
-
-    .acoes .excluir {
-      background: #e74c3c;
-    }
-
-    .painel {
-      margin-top:20px;
-    }
-
-    .card {
-      background: #fff;
-      border-radius: 10px;
-      padding: 15px;
-      margin-bottom: 15px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-    }
-
-    .top-buttons button {
-      width: 48%;
-      margin-bottom: 10px;
-    }
-      .senha-box {
-      position: relative;
-      display: flex;
-      align-items: center;
-    }
-
-    .senha-box input {
-      width: 100%;
-      padding-right: 40px;
-    }
-
-    .toggle {
-      position: absolute;
-      right: 12px;
-      cursor: pointer;
-      font-size: 18px;
-      user-select: none;
-    }
-
-</style>
+    *{box-sizing:border-box;font-family:Segoe UI,Arial,sans-serif}
+    body{margin:0;background:var(--bg);color:var(--texto);padding:20px;min-height:100vh}
+    h1{text-align:center;color:var(--vermelho);margin-bottom:10px}
+    .container{max-width:1000px;margin:auto;background:var(--card);padding:25px;border-radius:12px;box-shadow:0 10px 25px rgba(0,0,0,.2)}
+    button{padding:10px;border:none;border-radius:6px;background:var(--vermelho);color:#fff;cursor:pointer;font-weight:bold}
+    button:hover{opacity:.9}
+    input,select,textarea{padding:10px;border-radius:6px;border:1px solid #ccc;width:100%}
+    form{display:grid;gap:10px;margin-bottom:20px}
+    .top{display:flex;justify-content:space-between;gap:10px;margin-bottom:15px}
+    .card{background:var(--card);padding:15px;border-radius:10px;margin-bottom:10px;box-shadow:0 4px 10px rgba(0,0,0,.15)}
+    .atividade.concluida{text-decoration:line-through;opacity:.6}
+    .calendario{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;margin-top:10px}
+    .dia{padding:8px;border-radius:6px;background:#eee;font-size:12px}
+    body.dark .dia{background:#2a2a2a}
+  </style>
 </head>
 <body>
+
 <h1>📘 3º Ano A de Administração</h1>
 <div class="container">
-  <div class="banner">
-    <strong>Organização escolar • Gestão • Disciplina • Futuro</strong>
+
+<div class="top">
+  <button onclick="toggleDark()">🌙 Modo escuro</button>
+  <button onclick="logout()" style="background:#555">Sair</button>
+</div>
+
+<!-- LOGIN -->
+<div id="auth">
+  <h2>Acesso</h2>
+  <button onclick="mostrar('aluno')">Aluno</button>
+  <button onclick="mostrar('professor')" style="background:#8e44ad">Professor</button>
+
+  <div id="authAluno">
+    <h3>Aluno</h3>
+    <input id="loginNome" placeholder="Nome" />
+    <input id="loginSenha" type="password" placeholder="Senha" />
+    <button onclick="login('aluno')">Entrar</button>
+    <h4>Criar conta</h4>
+    <input id="regNome" placeholder="Nome" />
+    <input id="regSenha" type="password" placeholder="Senha" />
+    <button onclick="registrar('aluno')">Registrar</button>
   </div>
 
-  <!-- AUTH -->
-  <div id="auth">
-    <h2>Acesso</h2>
-    <button onclick="mostrar('aluno')">Aluno</button>
-    <button onclick="mostrar('professor')" style="background:#8e44ad">Professor</button>
-    <hr />
-
-    <div id="authAluno">
-      <h3>Aluno</h3>
-      <input id="loginNome" placeholder="Nome do aluno" />
-      <div class="senha-box"><input id="loginSenha" type="password" placeholder="Senha" /><span class="toggle" onclick="toggleSenha('loginSenha', this)">👁</span></div>
-      <button onclick="login('aluno')">Entrar</button>
-      <h4>Criar conta</h4>
-      <button onclick="recriarConta('aluno')" style="background:#555">🔄 Recriar conta</button>
-      <input id="regNome" placeholder="Nome do aluno" />
-      <div class="senha-box"><input id="regSenha" type="password" placeholder="Criar senha" /><span class="toggle" onclick="toggleSenha('regSenha', this)">👁</span></div>
-      <button onclick="registrar('aluno')">Registrar</button>
-    </div>
-
-          <button onclick="recriarConta('professor')" style="background:#555">🔄 Recriar conta</button>
-
-    <div id="authProfessor" style="display:none;">
-      <h3>Professor</h3>
-      <input id="profLoginNome" placeholder="Nome do professor" />
-      <div class="senha-box"><input id="profLoginSenha" type="password" placeholder="Senha" /><span class="toggle" onclick="toggleSenha('profLoginSenha', this)">👁</span></div>
-      <button onclick="login('professor')">Entrar</button>
-      <h4>Criar conta</h4>
-      <input id="profRegNome" placeholder="Nome do professor" />
-      <div class="senha-box"><input id="profRegSenha" type="password" placeholder="Criar senha" /><span class="toggle" onclick="toggleSenha('profRegSenha', this)">👁</span></div>
-      <button onclick="registrar('professor')">Registrar</button>
-    </div>
+  <div id="authProfessor" style="display:none">
+    <h3>Professor</h3>
+    <input id="profLoginNome" placeholder="Nome" />
+    <input id="profLoginSenha" type="password" placeholder="Senha" />
+    <button onclick="login('professor')">Entrar</button>
+    <h4>Criar conta</h4>
+    <input id="profRegNome" placeholder="Nome" />
+    <input id="profRegSenha" type="password" placeholder="Senha" />
+    <button onclick="registrar('professor')">Registrar</button>
   </div>
+</div>
 
-  <!-- ALUNO -->
-  <div id="alunoApp" style="display:none;">
-    <button onclick="logout()" style="background:#555">Sair</button>
-    <h2>Painel do Aluno</h2>
-    <p><strong>Aluno:</strong> <span id="nomeAluno"></span></p>
-    <form id="formAluno">
-      <select id="prioridade">
-        <option value="baixa">Prioridade baixa</option>
-        <option value="media">Prioridade média</option>
-        <option value="alta">Prioridade alta</option>
-      </select>
-      <input id="titulo" placeholder="Atividade" required />
-      <input id="data" type="date" required />
-      <select id="materia">
-        <option>Matemática</option><option>Português</option><option>Redação e Leitura</option>
-        <option>Física</option><option>Educação Física</option><option>História</option>
-        <option>Inglês</option><option>Gestão de Operações</option><option>Comunicação Empresarial</option>
-        <option>Marketing Estratégico</option><option>Orientação de Estudos de Português</option>
-        <option>Gestão Financeira e Contabilidade</option><option>Inovação e Desenvolvimento</option>
-        <option>Projeto Multidisciplinar</option><option>Orientação de Estudos de Matemática</option>
-      </select>
-      <button>Adicionar</button>
-    </form>
-    <div id="progresso"></div>
-    <div id="grafico"></div>
-    <div id="semana"></div>
-    <div id="calendario"></div>
-    <button onclick="exportarCSV()" style="background:#2980b9">📥 Exportar atividades</button>
-    <button onclick="toggleDark()" style="background:#111">🌙 Modo escuro</button>
-    <div id="lista"></div>
-  </div>
+<!-- ALUNO -->
+<div id="alunoApp" style="display:none">
+  <h2>Painel do Aluno</h2>
+  <form id="formAluno">
+    <input id="titulo" placeholder="Atividade" required />
+    <input id="data" type="date" required />
+    <select id="materia"><option>Matemática</option><option>Português</option><option>Física</option></select>
+    <input type="file" id="arquivo" />
+    <button>Adicionar</button>
+  </form>
+  <div id="lista"></div>
+  <h3>📅 Calendário semanal</h3>
+  <div id="calendario" class="calendario"></div>
+</div>
 
-  <!-- PROFESSOR -->
-  <div id="professorApp" style="display:none;">
-    <button onclick="logout()" style="background:#555">Sair</button>
-    <h2>Painel do Professor</h2>
-    <p><strong>Professor:</strong> <span id="nomeProfessor"></span></p>
-
-    <form id="formAula">
-      <input id="aulaData" type="date" required />
-      <input id="aulaMateria" placeholder="Matéria" required />
-      <input id="aulaHoras" type="number" min="1" placeholder="Carga horária (h)" required />
-      <textarea id="aulaConteudo" placeholder="Conteúdo ministrado" required></textarea>
-      <button>Registrar aula</button>
-    </form>
-
-    <div id="listaAulas"></div>
-  </div>
+<!-- PROFESSOR -->
+<div id="professorApp" style="display:none">
+  <h2>Painel do Professor</h2>
+  <form id="formAula">
+    <input id="aulaData" type="date" required />
+    <input id="aulaMateria" placeholder="Matéria" required />
+    <textarea id="aulaConteudo" placeholder="Conteúdo" required></textarea>
+    <button>Registrar aula</button>
+  </form>
+  <div id="listaAulas"></div>
+</div>
 
 </div>
 
 <script>
-const $ = id => document.getElementById(id);
-let usuario = localStorage.getItem('usuario');
-let tipo = localStorage.getItem('tipo');
+const $=id=>document.getElementById(id)
+let usuario=localStorage.getItem('usuario')
+let tipo=localStorage.getItem('tipo')
 
 function hash(s){let h=0;for(let c of s)h=((h<<5)-h)+c.charCodeAt(0);return h+''}
-function getUsers(t){return JSON.parse(localStorage.getItem(t+'_users'))||{}}
-function saveUsers(t,u){localStorage.setItem(t+'_users',JSON.stringify(u))}
+function users(t){return JSON.parse(localStorage.getItem(t+'_users'))||{}}
+function save(t,u){localStorage.setItem(t+'_users',JSON.stringify(u))}
 
-function mostrar(t){$('authAluno').style.display=t==='aluno'?'block':'none';$('authProfessor').style.display=t==='professor'?'block':'none'}
+function mostrar(t){authAluno.style.display=t==='aluno'?'block':'none';authProfessor.style.display=t==='professor'?'block':'none'}
 
-function recriarConta(t){
-  const nome=$(t==='aluno'?'regNome':'profRegNome').value.trim().toLowerCase();
-  const senha=$(t==='aluno'?'regSenha':'profRegSenha').value;
-  if(nome.length<3||senha.length<4) return alert('Dados inválidos');
-  const users=getUsers(t);
-  users[nome]={senha:hash(senha),dados:[]};
-  saveUsers(t,users);
-  alert('Conta recriada com sucesso. Faça login.');
-}
+function registrar(t){const n=$(t==='aluno'?'regNome':'profRegNome').value.trim();const s=$(t==='aluno'?'regSenha':'profRegSenha').value;if(!n||!s)return alert('Dados inválidos');const u=users(t);if(u[n])return alert('Conta já existe');u[n]={senha:hash(s)};save(t,u);alert('Conta criada')}
 
-function registrar(t){
-  const nome=$(t==='aluno'?'regNome':'profRegNome').value.trim().toLowerCase();
-  const senha=$(t==='aluno'?'regSenha':'profRegSenha').value;
-  if(nome.length<3||senha.length<4) return alert('Dados inválidos');
-  const users=getUsers(t);
-  if(users[nome]) return alert('Usuário já existe');
-  users[nome]={senha:hash(senha),dados:[]};
-  saveUsers(t,users);
-  alert('Conta criada');
-}
+function login(t){const n=$(t==='aluno'?'loginNome':'profLoginNome').value.trim();const s=$(t==='aluno'?'loginSenha':'profLoginSenha').value;const u=users(t);if(!u[n]||u[n].senha!==hash(s))return alert('Login inválido');localStorage.setItem('usuario',n);localStorage.setItem('tipo',t);location.reload()}
 
-function login(t){
-  const nome=$(t==='aluno'?'loginNome':'profLoginNome').value.trim().toLowerCase();
-  const senha=$(t==='aluno'?'loginSenha':'profLoginSenha').value;
-  const users=getUsers(t);
-  if(!users[nome]||users[nome].senha!==hash(senha)) return alert('Login inválido');
-  usuario=nome;tipo=t;
-  localStorage.setItem('usuario',nome);localStorage.setItem('tipo',t);
-  iniciar();
-}
+function logout(){localStorage.removeItem('usuario');localStorage.removeItem('tipo');location.reload()}
 
-function logout(){localStorage.clear();location.reload()}
+function iniciar(){auth.style.display='none';if(tipo==='aluno')initAluno();else initProfessor()}
 
-// ===== ALUNO =====
-function iniciarAluno(){
-  $('alunoApp').style.display='block';
-  $('nomeAluno').textContent = usuario;
-  const key='ativ_'+usuario;
-  let atvs=JSON.parse(localStorage.getItem(key))||[];
+function initAluno(){alunoApp.style.display='block';const key='ativ_'+usuario;let a=JSON.parse(localStorage.getItem(key))||[];formAluno.onsubmit=e=>{e.preventDefault();a.push({t:titulo.value,d:data.value,m:materia.value,f:arquivo.files[0]?.name||''});localStorage.setItem(key,JSON.stringify(a));render()};function render(){lista.innerHTML='';calendario.innerHTML='';a.forEach(x=>{lista.innerHTML+=`<div class="card atividade">${x.t} - ${x.m} ${x.f?'📎':''}</div>`;calendario.innerHTML+=`<div class="dia">${x.d}<br>${x.t}</div>`})}render()}
 
-  $('formAluno').onsubmit=e=>{
-    e.preventDefault();
-    atvs.push({
-      t:titulo.value,
-      m:materia.value,
-      d:data.value,
-      p:prioridade.value,
-      b:new Date(data.value).getMonth()+1,
-      c:false
-    });
-    localStorage.setItem(key,JSON.stringify(atvs));
-    renderAluno();
-  };
+function initProfessor(){professorApp.style.display='block';const key='aulas_'+usuario;let a=JSON.parse(localStorage.getItem(key))||[];formAula.onsubmit=e=>{e.preventDefault();a.push({d:aulaData.value,m:aulaMateria.value,c:aulaConteudo.value});localStorage.setItem(key,JSON.stringify(a));render()};function render(){listaAulas.innerHTML='';a.forEach(x=>listaAulas.innerHTML+=`<div class="card">${x.d} - ${x.m}<br>${x.c}</div>`)}render()}
 
-  function renderAluno(){
-    const hoje=new Date().toISOString().split('T')[0];
-    const concluidas=atvs.filter(a=>a.c).length;
-
-    progresso.innerHTML=`<strong>Progresso:</strong> ${concluidas}/${atvs.length} concluídas`;
-
-    grafico.innerHTML=`<div style="background:#eee;height:12px;border-radius:6px;overflow:hidden">
-      <div style="width:${atvs.length?concluidas/atvs.length*100:0}%;background:#27ae60;height:100%"></div>
-    </div>`;
-
-    const hojeData=new Date();
-    const semanaFim=new Date();
-    semanaFim.setDate(hojeData.getDate()+7);
-
-    semana.innerHTML='<h4>📅 Minha semana</h4>';
-    atvs.filter(a=>!a.c && new Date(a.d)>=hojeData && new Date(a.d)<=semanaFim)
-      .forEach(a=>semana.innerHTML+=`<div>• ${a.t} (${a.d})</div>`);
-
-    calendario.innerHTML='<h4>🗓 Calendário mensal</h4>';
-    atvs.forEach(a=>calendario.innerHTML+=`<div>${a.d} — ${a.t}</div>`);
-
-    lista.innerHTML='';
-    atvs.forEach((a,i)=>{
-      const d=document.createElement('div');
-      const atrasada=!a.c && a.d<hoje;
-      d.className='atividade'+(a.c?' concluida':'');
-      d.style.borderLeft='6px solid '+(a.p==='alta'?'#e74c3c':a.p==='media'?'#f1c40f':'#2ecc71');
-      d.innerHTML=`<span>${a.t} - ${a.m} | ${a.d}${atrasada?' ⚠️ Atrasada':''}<br><small>Bimestre ${Math.ceil(a.b/2)}</small></span>`;
-      const b=document.createElement('button');
-      b.textContent='✔';
-      b.onclick=()=>{a.c=!a.c;localStorage.setItem(key,JSON.stringify(atvs));renderAluno()};
-      d.appendChild(b);
-      lista.appendChild(d);
-    });
-  }
-
-  renderAluno();
-}
-
-// ===== PROFESSOR =====
-function iniciarProfessor(){
-  $('nomeProfessor').textContent = usuario;
-  $('professorApp').style.display='block';
-  const key='aulas_'+usuario;
-  let aulas=JSON.parse(localStorage.getItem(key))||[];
-  $('formAula').onsubmit=e=>{e.preventDefault();aulas.push({d:aulaData.value,m:aulaMateria.value,h:aulaHoras.value,c:aulaConteudo.value});localStorage.setItem(key,JSON.stringify(aulas));renderProf()}
-  function renderProf(){listaAulas.innerHTML='';aulas.forEach(a=>{const d=document.createElement('div');d.className='aula';d.innerHTML=`<span><strong>${a.d}</strong> | ${a.m} (${a.h}h)<br>${a.c}</span>`;listaAulas.appendChild(d)})}
-  renderProf();
-}
-
-function iniciar(){ $('auth').style.display='none'; if(tipo==='aluno') iniciarAluno(); else iniciarProfessor() }
-
-if(usuario&&tipo) iniciar();
-function toggleSenha(id, el){const i=document.getElementById(id);if(i.type==='password'){i.type='text';el.textContent='🙈'}else{i.type='password';el.textContent='👁'}}
-
+function toggleDark(){document.body.classList.toggle('dark');localStorage.setItem('dark',document.body.classList.contains('dark'))}
+if(localStorage.getItem('dark')==='true')document.body.classList.add('dark')
+if(usuario&&tipo)iniciar()
 </script>
 </body>
 </html>
