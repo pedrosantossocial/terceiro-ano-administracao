@@ -102,7 +102,26 @@
       width: 48%;
       margin-bottom: 10px;
     }
-  </style>
+      .senha-box {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .senha-box input {
+      width: 100%;
+      padding-right: 40px;
+    }
+
+    .toggle {
+      position: absolute;
+      right: 12px;
+      cursor: pointer;
+      font-size: 18px;
+      user-select: none;
+    }
+
+</style>
 </head>
 <body>
 <h1>📘 3º Ano A de Administração</h1>
@@ -121,22 +140,22 @@
     <div id="authAluno">
       <h3>Aluno</h3>
       <input id="loginNome" placeholder="Nome do aluno" />
-      <input id="loginSenha" type="password" placeholder="Senha" />
+      <div class="senha-box"><input id="loginSenha" type="password" placeholder="Senha" /><span class="toggle" onclick="toggleSenha('loginSenha', this)">👁</span></div>
       <button onclick="login('aluno')">Entrar</button>
       <h4>Criar conta</h4>
       <input id="regNome" placeholder="Nome do aluno" />
-      <input id="regSenha" type="password" placeholder="Criar senha" />
+      <div class="senha-box"><input id="regSenha" type="password" placeholder="Criar senha" /><span class="toggle" onclick="toggleSenha('regSenha', this)">👁</span></div>
       <button onclick="registrar('aluno')">Registrar</button>
     </div>
 
     <div id="authProfessor" style="display:none;">
       <h3>Professor</h3>
       <input id="profLoginNome" placeholder="Nome do professor" />
-      <input id="profLoginSenha" type="password" placeholder="Senha" />
+      <div class="senha-box"><input id="profLoginSenha" type="password" placeholder="Senha" /><span class="toggle" onclick="toggleSenha('profLoginSenha', this)">👁</span></div>
       <button onclick="login('professor')">Entrar</button>
       <h4>Criar conta</h4>
       <input id="profRegNome" placeholder="Nome do professor" />
-      <input id="profRegSenha" type="password" placeholder="Criar senha" />
+      <div class="senha-box"><input id="profRegSenha" type="password" placeholder="Criar senha" /><span class="toggle" onclick="toggleSenha('profRegSenha', this)">👁</span></div>
       <button onclick="registrar('professor')">Registrar</button>
     </div>
   </div>
@@ -236,6 +255,8 @@ function iniciarProfessor(){
 function iniciar(){ $('auth').style.display='none'; if(tipo==='aluno') iniciarAluno(); else iniciarProfessor() }
 
 if(usuario&&tipo) iniciar();
+function toggleSenha(id, el){const i=document.getElementById(id);if(i.type==='password'){i.type='text';el.textContent='🙈'}else{i.type='password';el.textContent='👁'}}
+
 </script>
 </body>
 </html>
